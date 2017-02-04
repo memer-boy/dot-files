@@ -2,13 +2,17 @@
 # wm independent hotkeys
 #
 
-# terminal emulator
+# terminal emulator (solarized dark)
 super + Return
-	urxvt
+      bash -c "sed -i 's/solarized-light/solarized-dark/g' .zshrc; urxvt -bc +sb"
+
+# terminal emulator (solarized light)
+super + {_,shift + }Return
+      bash -c "sed -i 's/solarized-dark/solarized-light/g' .zshrc; urxvt -bc +sb"
 
 # program launcher
 super + space
-	dmenu_run
+	dmenu_run -b
 
 # make sxhkd reload its configuration files:
 super + Escape
@@ -119,3 +123,22 @@ super + alt + shift + {h,j,k,l}
 # move a floating window
 super + {Left,Down,Up,Right}
 	bspc node -v {-20 0,0 20,0 -20,20 0}
+
+#
+# Make things happen
+#
+
+XF86AudioLowerVolume
+      mpc volume -10
+
+XF86AudioRaiseVolume
+      mpc volume +10
+
+XF86AudioMute
+      bash -c "if [ `mpc volume |  tr -d '[:alpha:][:punct:]'` != "0" ]; then echo `mpc volume| tr -d '[:alpha:][:punct:]'` > /tmp/mpc_vol; mpc volume 0; else mpc volume `cat /tmp/mpc_vol`; fi"
+
+XF86MonBrightnessDown
+	xbacklight -10
+
+XF86MonBrightnessUp
+	xbacklight +10

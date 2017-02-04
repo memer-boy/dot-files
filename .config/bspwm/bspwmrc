@@ -1,8 +1,20 @@
 #! /bin/sh
 
-sxhkd &
+export PATH=$HOME/.local/bin:$PATH
+xset +fp ~/.fonts/siji
+xset +fp ~/.fonts/tewi
+xset +fp ~/.fonts/ohsnap
+xset +fp ~/.fonts/fontawesome
+xset +fp ~/.fonts/terminesspowerline
 
-bspc monitor -d I II III IV V VI VII VIII IX X
+
+sxhkd &
+compton &
+nitrogen --restore
+bspc monitor -d I II III IV V
+runhaskell -XFlexibleContexts -i$HOME/.scripts/lemonbar $HOME/.scripts/lemonbar/bar.hs &
+wicd-gtk -t &
+blueman-applet 2>&1 > /dev/null &
 
 bspc config border_width         2
 bspc config window_gap          12
@@ -16,3 +28,5 @@ bspc rule -a Chromium desktop='^2'
 bspc rule -a mplayer2 state=floating
 bspc rule -a Kupfer.py focus=on
 bspc rule -a Screenkey manage=off
+
+bspc desktop III -f

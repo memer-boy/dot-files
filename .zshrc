@@ -1,8 +1,9 @@
 # If you come from bash you might have to change your $PATH.
-#export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
+export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
+export PATH="$HOME/.dynamic-colors/bin:$PATH"
 
-# Path to your oh-my-zsh installation.
-  export ZSH=/home/memery/.oh-my-zsh
+#Path to your oh-my-zsh installation.
+export ZSH=/home/memery/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -83,4 +84,9 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias config='/usr/bin/git --git-dir=/home/memery/.cfg/ --work-tree=/home/memery'
+alias dot-files='/usr/bin/git --git-dir=/home/memery/.cfg/ --work-tree=/home/memery'
+
+#Some sources for config and other stuff
+source $HOME/.dynamic-colors/completions/dynamic-colors.zsh
+dynamic-colors switch solarized-dark
+dynamic-colors init

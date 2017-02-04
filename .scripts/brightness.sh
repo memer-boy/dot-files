@@ -1,5 +1,5 @@
 #!/bin/bash
-. ~/.scripts/entorno
+#. ~/.scripts/entorno
 
 bmax=`cat /sys/class/backlight/intel_backlight/max_brightness`
 binc=$((bmax / 20))

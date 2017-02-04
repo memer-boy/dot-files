@@ -42,13 +42,13 @@ oDeskButton n a = Button
                   ((setfgColor (if a then infoColor else fColor)) ++
                    (putIcon oDeskIcon) ++
                    (setfgColor fColor))
-                  (Map.fromList [(1,"bspc desktop -f ^" ++ n)])
+                  (Map.fromList [(1,"bspc desktop -f " ++ n)])
                   
 fDeskButton n a = Button
                   ((setfgColor (if a then infoColor else fColor)) ++
                     (putIcon fDeskIcon) ++
                     (setfgColor fColor))
-                  (Map.fromList [(1,"bspc desktop -f ^" ++ n)])
+                  (Map.fromList [(1,"bspc desktop -f " ++ n)])
 
 -- Tray part
 calendarButton = Button (putIcon calendarIcon) (Map.fromList [(1,"calAx")])

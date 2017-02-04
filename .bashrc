@@ -113,5 +113,5 @@ if ! shopt -oq posix; then
 fi
 
 # added by Miniconda3 4.2.11 installer
-export PATH="/home/memery/miniconda3/bin:$PATH"
+export PATH="$HOME/.local/bin:/home/memery/miniconda3/bin:$PATH"
 alias config='/usr/bin/git --git-dir=/home/memery/.cfg/ --work-tree=/home/memery'
