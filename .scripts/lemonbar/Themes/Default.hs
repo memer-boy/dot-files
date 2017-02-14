@@ -34,6 +34,7 @@ module Themes.Default
   , mPauseIcon
   , mFwIcon
   , mNextIcon
+  , volIcon
   , vol0Icon
   , vol1Icon
   , vol2Icon
@@ -82,6 +83,7 @@ mPlayIcon = Icon "\57432" iconSetFont
 mPauseIcon = Icon "\57433" iconSetFont
 mFwIcon = Icon "\57435" iconSetFont
 mNextIcon = Icon "\57434" iconSetFont
+volIcon = Icon "\57422" iconSetFont
 vol0Icon = Icon "\57423" iconSetFont
 vol1Icon = Icon "\57422" iconSetFont
 vol2Icon = Icon "\57424" iconSetFont

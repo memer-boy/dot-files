@@ -40,7 +40,7 @@ fwButton = Button (putIcon mFwIcon) (Map.fromList [(1,"mpc seek +5"), (3,"mpc se
 nextButton = Button (putIcon mNextIcon) (Map.fromList [(1,"mpc -q next")])
 
 -- General volume control
-volButton = Button (putIcon vol0Icon) (Map.fromList [(1, "pavucontrol")])
+volButton = Button (putIcon volIcon) (Map.fromList [(1, "pavucontrol")])
 
 -- Desktop manager
 oDeskButton n a = Button

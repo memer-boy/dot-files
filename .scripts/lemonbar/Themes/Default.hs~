@@ -38,6 +38,7 @@ module Themes.Default
   , vol1Icon
   , vol2Icon
   , vol3Icon
+  , powerIcon
   ) where
 import Lemonbar
 
@@ -85,3 +86,5 @@ vol0Icon = Icon "\57423" iconSetFont
 vol1Icon = Icon "\57422" iconSetFont
 vol2Icon = Icon "\57424" iconSetFont
 vol3Icon = Icon "\57437" iconSetFont
+
+powerIcon = Icon "\57357" iconSetFont
