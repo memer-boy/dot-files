@@ -129,16 +129,30 @@ super + {Left,Down,Up,Right}
 #
 
 XF86AudioLowerVolume
-      mpc volume -10
-
+#	mpc volume -10
+	pactl set-sink-volume 0 -10%
 XF86AudioRaiseVolume
-      mpc volume +10
+#	mpc volume +10
+	pactl set-sink-volume 0 +10%
 
 XF86AudioMute
-      bash -c "if [ `mpc volume |  tr -d '[:alpha:][:punct:]'` != "0" ]; then echo `mpc volume| tr -d '[:alpha:][:punct:]'` > /tmp/mpc_vol; mpc volume 0; else mpc volume `cat /tmp/mpc_vol`; fi"
+#	bash -c "if [ `mpc volume |  tr -d '[:alpha:][:punct:]'` != "0" ]; then echo `mpc volume| tr -d '[:alpha:][:punct:]'` > /tmp/mpc_vol; mpc volume 0; else mpc volume `cat /tmp/mpc_vol`; fi"
+	pactl set-sink-mute 0 toggle
+
+XF86AudioPrev
+	mpc prev
+
+XF86AudioNext
+	mpc next
 
 XF86MonBrightnessDown
 	xbacklight -10
 
 XF86MonBrightnessUp
 	xbacklight +10
+
+#
+# MPC controls
+#
+super + ctrl + {Left, Right}
+      mpc {prev, next}
