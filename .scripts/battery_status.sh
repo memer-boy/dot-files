@@ -7,5 +7,5 @@ if [ -f $BATTERY_PATH ]; then
 
 	echo $(((bat_now * 100) / bat_full)) `cat $BATTERY_PATH/status`
 else
-	echo 100 Charged
+	echo "100 Full"
 fi
