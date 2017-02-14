@@ -112,17 +112,16 @@ dat_task = do
     return (concat dat, False)
 
 -- Bucle de refreso a pantalla
-lemonbar_update =
-  let params =
-        [ "-g1568x32+16+8",
-          "-B" ++ bColor,
-          "-F" ++ fColor,
-          "-a 20"]
-  in do
+lemonbar_update = do
+    (_, screenW, _) <- readProcessWithExitCode "bash" [ "-c", "xrandr | grep \\* | xargs | cut -dx -f1"] []
     (Just hin, Just hout, _, _) <- createProcess
       (proc "lemonbar" (
           [("-f" ++ (fid mainFont))
-          , ("-f" ++ (fid iconSetFont))] ++ params))
+          , ("-f" ++ (fid iconSetFont))
+          , ("-g"++ (show $ ((read (List.filter (/= '\n') screenW) :: Int) - 24)) ++ "x32+12+8")
+          , ("-B" ++ bColor)
+          , ("-F" ++ fColor)
+          , "-a 20"]))
       { std_in = CreatePipe
       , std_out = CreatePipe}
     hSetBuffering hin NoBuffering
