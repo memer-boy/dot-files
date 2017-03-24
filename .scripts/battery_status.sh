@@ -1,7 +1,7 @@
 # !/bin/bash
 . ~/.scripts/entorno
 
-if [ -f $BATTERY_PATH ]; then
+if [ -d $BATTERY_PATH ]; then
 	bat_now=`cat $BATTERY_PATH/charge_now`
 	bat_full=`cat $BATTERY_PATH/charge_full`
 
