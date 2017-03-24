@@ -16,6 +16,14 @@ runhaskell -XFlexibleContexts -i$HOME/.scripts/lemonbar $HOME/.scripts/lemonbar/
 wicd-gtk -t &
 blueman-applet 2>&1 > /dev/null &
 
+if [ -x ~/.local/bin/mopidy ]; then
+    mopidy 2>&1 > /dev/null &
+fi
+
+if [ -x ~/.local/bin/beet ]; then
+    beet web 2>&1 > /dev/null &
+fi
+
 bspc config border_width         2
 bspc config window_gap          12
 

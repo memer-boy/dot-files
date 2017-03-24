@@ -38,6 +38,7 @@ playButton = Button (putIcon mPlayIcon) (Map.fromList [(1,"mpc -q play")])
 pauseButton = Button (putIcon mPauseIcon) (Map.fromList [(1,"mpc -q pause")])
 fwButton = Button (putIcon mFwIcon) (Map.fromList [(1,"mpc seek +5"), (3,"mpc seek +10")])
 nextButton = Button (putIcon mNextIcon) (Map.fromList [(1,"mpc -q next")])
+plButton = Button (putIcon mPlayListIcon) (Map.fromList [(1,"urxvt -e '/usr/bin/ncmpcpp'")])
 
 -- General volume control
 volButton = Button (putIcon volIcon) (Map.fromList [(1, "pavucontrol")])
@@ -85,7 +86,7 @@ mpd_task = do
       curSong = if (length playing) > 0
                 then (List.filter (/= '\n') song)
                 else ""
-      mpd = [(setfgColor fColor), (putButton prevButton), (putButton bwButton), (putButton curButton),
+      mpd = [(setfgColor fColor), (putButton plButton), (putButton prevButton), (putButton bwButton), (putButton curButton),
              (putButton stopButton), (putButton fwButton), (putButton nextButton), (putButton volButton), curSong]
   return (concat mpd , False)
 

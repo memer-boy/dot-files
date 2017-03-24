@@ -78,7 +78,7 @@
 (global-set-key [(shift meta x)] 'smex-major-mode-commands)
 
 ;; change theme
-(load-theme 'solarized-light t)
+(load-theme 'solarized-dark t)
 
 ;; disable toolbar
 (tool-bar-mode -1)
