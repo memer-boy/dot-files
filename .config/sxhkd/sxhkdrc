@@ -156,3 +156,6 @@ XF86MonBrightnessUp
 #
 super + ctrl + {Left, Right}
       mpc {prev, next}
+
+super + ctrl + p
+      urxvt -e '/usr/bin/ncmpcpp'

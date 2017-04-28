@@ -95,8 +95,11 @@ power_task :: IO (String, Bool)
 power_task = do
   readed <- readCreateProcess (shell "~/.scripts/battery_status.sh") ""
   let fields = words readed
-      level = fields!!0
-  return (get_battery_i  ((read (fields!!0) :: Int), fields!!1))
+      level = (read (fields!!0) :: Int)
+      status = fields!!1
+  when ((not $ (status =~ "Full") || (status =~ "Charging")) && (level < 25)) $ do callCommand "~/.scripts/alert.sh"
+                                                                                   return ()
+  return (get_battery_i (level, status))
   where get_battery_i (level, status)
           | status =~ "Full" :: Bool = (bat_chg_full, False)
           | status =~ "Charging" :: Bool = (bat_chg, False)
@@ -135,7 +138,7 @@ lemonbar_update = do
       (mpd, _) <- mpd_task
       (pow, _) <- power_task
       (dat, _) <- dat_task
-      let out = [(align Lemonbar.Left), (setfgColor alarmColor) ++ (putButton powerButton), mpd,
+      let out = [(align Lemonbar.Left), (setfgColor alarmColor) ++ (putButton powerButton) ++ "   " , mpd,
                  (align Lemonbar.Center), dsk, 
                  (align Lemonbar.Right), pow, dat, (setfgColor infoColor) ++ (putButton trayButton)]
       hPutStrLn hin (" " ++ (concat out) ++ " ")
