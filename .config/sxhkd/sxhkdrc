@@ -10,6 +10,9 @@ super + Return
 super + {_,shift + }Return
       bash -c "sed -i 's/solarized-dark/solarized-light/g' .zshrc; urxvt -bc +sb"
 
+super + ctrl + space
+      mpc toggle
+
 # program launcher
 super + space
 	dmenu_run -b
@@ -159,3 +162,4 @@ super + ctrl + {Left, Right}
 
 super + ctrl + p
       urxvt -e '/usr/bin/ncmpcpp'
+
