@@ -91,3 +91,4 @@ source $HOME/.dynamic-colors/completions/dynamic-colors.zsh
 dynamic-colors switch solarized-dark
 dynamic-colors init
 setopt +o nomatch
+alias today=date '+%Y-%m-%d'

@@ -163,3 +163,6 @@ super + ctrl + {Left, Right}
 super + ctrl + p
       urxvt -e '/usr/bin/ncmpcpp'
 
+# MAke IMage
+super + ctrl + s
+      maim
