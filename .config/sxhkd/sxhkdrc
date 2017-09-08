@@ -4,11 +4,11 @@
 
 # terminal emulator (solarized dark)
 super + Return
-      bash -c "sed -i 's/solarized-light/solarized-dark/g' .zshrc; urxvt -bc +sb"
+      bash -c "sed -i 's/solarized-light/solarized-dark/g' .zshrc; rxvt -bc +sb"
 
 # terminal emulator (solarized light)
 super + {_,shift + }Return
-      bash -c "sed -i 's/solarized-dark/solarized-light/g' .zshrc; urxvt -bc +sb"
+      bash -c "sed -i 's/solarized-dark/solarized-light/g' .zshrc; rxvt -bc +sb"
 
 super + ctrl + space
       mpc toggle
@@ -133,14 +133,14 @@ super + {Left,Down,Up,Right}
 
 XF86AudioLowerVolume
 #	mpc volume -10
-	pactl set-sink-volume 0 -10%
+	pactl set-sink-volume jack_out -10%
 XF86AudioRaiseVolume
 #	mpc volume +10
-	pactl set-sink-volume 0 +10%
+	pactl set-sink-volume jack_out +10%
 
 XF86AudioMute
 #	bash -c "if [ `mpc volume |  tr -d '[:alpha:][:punct:]'` != "0" ]; then echo `mpc volume| tr -d '[:alpha:][:punct:]'` > /tmp/mpc_vol; mpc volume 0; else mpc volume `cat /tmp/mpc_vol`; fi"
-	pactl set-sink-mute 0 toggle
+	pactl set-sink-mute jack_out toggle
 
 XF86AudioPrev
 	mpc prev
