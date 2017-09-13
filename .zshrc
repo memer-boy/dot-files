@@ -66,6 +66,9 @@ if [[ $TERM == "dumb" ]]; then	# in emacs
     unfunction preexec
 else
     source $ZSH/oh-my-zsh.sh
+    source $HOME/.dynamic-colors/completions/dynamic-colors.zsh
+    dynamic-colors switch solarized-dark
+    dynamic-colors init
 fi
 
 # User configuration
@@ -99,9 +102,6 @@ fi
 alias dot-files='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
 #Some sources for config and other stuff
-source $HOME/.dynamic-colors/completions/dynamic-colors.zsh
-dynamic-colors switch solarized-dark
-dynamic-colors init
 setopt +o nomatch
 alias today="date '+%Y-%m-%d'"
 alias waw="echo `whoami`@`hostname`"
