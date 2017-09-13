@@ -54,7 +54,19 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
-source $ZSH/oh-my-zsh.sh
+# borrowed form https://github.com/brianloveswords/dotfiles/blob/master/zsh/zshrc.server
+if [[ $TERM == "dumb" ]]; then	# in emacs
+    PS1='%(?..[%?])%!:%~%# '
+    # for tramp to not hang, need the following. cf:
+    # http://www.emacswiki.org/emacs/TrampMode
+    unsetopt zle
+    unsetopt prompt_cr
+    unsetopt prompt_subst
+    unfunction precmd
+    unfunction preexec
+else
+    source $ZSH/oh-my-zsh.sh
+fi
 
 # User configuration
 
