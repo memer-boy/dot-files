@@ -149,10 +149,12 @@ XF86AudioNext
 	mpc next
 
 XF86MonBrightnessDown
-	xbacklight -10
+	.scripts/brightness.sh down
+#	xbacklight -5
 
 XF86MonBrightnessUp
-	xbacklight +10
+	.scripts/brightness.sh up
+#	xbacklight +5
 
 #
 # MPC controls

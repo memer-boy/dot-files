@@ -1,23 +1,22 @@
 #!/bin/bash
 #. ~/.scripts/entorno
 
-bmax=`cat /sys/class/backlight/intel_backlight/max_brightness`
-binc=$((bmax / 20))
-bcur=`cat /sys/class/backlight/intel_backlight/brightness`
+bcur=`xbacklight`
+bcur=${bcur%%.*}
+
+if [ $bcur -le 10 ]; then
+    binc=1
+else
+    binc=10
+fi
+
+echo $binc
 
 case $1 in
     up)
-	next=$((bcur + binc))
-	if [ $next -gt $bmax ]; then
-	    next=$bmax
-	fi
-        echo $next > /sys/class/backlight/intel_backlight/brightnes
+        xbacklight +$binc
 	;;
     down)
-	next=$((bcur - binc))
-	if [ $next -lt 0 ]; then
-	    next=0
-	fi
-        echo $next > /sys/class/backlight/intel_backlight/brightnes
+        xbacklight -$binc
 	;;
 esac
