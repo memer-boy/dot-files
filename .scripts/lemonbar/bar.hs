@@ -19,7 +19,7 @@ wordsWhen p s =  case dropWhile p s of
                    s' -> w : wordsWhen p s''
                      where (w, s'') = break p s'
 filter_nl s = (List.filter (/='\n') s)
-no_alfa color = "#" ++ (drop 3 color)
+no_alfa color = "#" ++ (List.drop 3 color)
 inv_color i = (setfgColor (if i then bColor else fColor)) ++ (setbgColor (if i then fColor else bColor))
 
 bat_chg_full = (setfgColor okColor) ++ (putIcon batteryFullChrgIcon)
@@ -98,7 +98,8 @@ power_task = do
       level = (read (fields!!0) :: Int)
       status = fields!!1
   when ((not $ (status =~ "Full") || (status =~ "Charging")) && (level < 25)) $ do callCommand "~/.scripts/alert.sh"
-                                                                                   return ()
+  return ()
+  
   return (get_battery_i (level, status))
   where get_battery_i (level, status)
           | status =~ "Full" :: Bool = (bat_chg_full, False)

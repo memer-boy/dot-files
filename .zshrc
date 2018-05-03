@@ -105,3 +105,8 @@ alias dot-files='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 setopt +o nomatch
 alias today="date '+%Y-%m-%d'"
 alias waw="echo `whoami`@`hostname`"
+alias sshx="TERM=xterm ssh $1"
+alias maim="maim ~/Imágenes/$(date +%s).png"
+
+# OPAM configuration
+. /home/memery/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
