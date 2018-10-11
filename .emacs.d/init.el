@@ -58,7 +58,10 @@
  '(custom-safe-themes
    (quote
     ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
- '(inhibit-startup-screen t))
+ '(inhibit-startup-screen t)
+ '(package-selected-packages
+   (quote
+    (weechat weechat-alert s solarized-theme smex smartparens rainbow-mode rainbow-delimiters macrostep intero csv-mode ac-cider))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -193,3 +196,25 @@
 ;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
 (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
 ;; ## end of OPAM user-setup addition for emacs / base ## keep this line
+
+;;--------------------------------------------------------------
+;; Weechat
+;;--------------------------------------------------------------
+(require 'weechat)
+
+;;--------------------------------------------------------------
+;; Erlang
+;;--------------------------------------------------------------
+;; Erlang-mode
+(require 'erlang-start)
+(add-hook 'erlang-mode-hook
+             (lambda ()
+            ;; when starting an Erlang shell in Emacs, the node name
+            ;; by default should be "emacs"
+            (setq inferior-erlang-machine-options '("-sname" "emacs"))
+            ;; add Erlang functions to an imenu menu
+            (imenu-add-to-menubar "imenu")))
+;; DISTEL
+(push "~/.emacs.d/distel/elisp/" load-path)
+(require 'distel)
+(distel-setup)
