@@ -61,7 +61,7 @@
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (weechat weechat-alert s solarized-theme smex smartparens rainbow-mode rainbow-delimiters macrostep intero csv-mode ac-cider))))
+    (company-lua lua-mode weechat weechat-alert s solarized-theme smex smartparens rainbow-mode rainbow-delimiters macrostep intero csv-mode ac-cider))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
