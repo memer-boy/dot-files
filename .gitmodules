@@ -1,9 +1,3 @@
 [submodule ".dynamic-colors"]
 	path = .dynamic-colors
 	url = https://github.com/sos4nt/dynamic-colors
-[submodule ".config/awesome/lain"]
-	path = .config/awesome/lain
-	url = git://github.com/lcpz/lain.git
-[submodule ".config/awesome/freedesktop"]
-	path = .config/awesome/freedesktop
-	url = git://github.com/lcpz/awesome-freedesktop.git
