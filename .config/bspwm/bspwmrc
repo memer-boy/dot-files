@@ -6,14 +6,16 @@ xset +fp ~/.fonts/tewi
 xset +fp ~/.fonts/ohsnap
 xset +fp ~/.fonts/fontawesome
 xset +fp ~/.fonts/terminesspowerline
-
+xsetroot -cursor_name left_ptr
+feh --bg-scale Downloads/desert.jpg
 
 sxhkd &
 compton &
-nitrogen --restore
-bspc monitor -d I II III IV V
-runhaskell -XFlexibleContexts -i$HOME/.scripts/lemonbar $HOME/.scripts/lemonbar/bar.hs &
+#nitrogen --restore
+bspc monitor -d 1 2 3 4 5 6 7 8 9 0
+# runhaskell -XFlexibleContexts -i$HOME/.scripts/lemonbar $HOME/.scripts/lemonbar/bar.hs &
 wicd-gtk -t &
+polybar example &
 blueman-applet 2>&1 > /dev/null &
 
 if [ -x ~/.local/bin/mopidy ]; then
@@ -24,8 +26,8 @@ if [ -x ~/.local/bin/beet ]; then
     beet web 2>&1 > /dev/null &
 fi
 
-bspc config border_width         2
-bspc config window_gap          12
+bspc config border_width         1
+bspc config window_gap          8
 
 bspc config split_ratio          0.50
 bspc config borderless_monocle   true
@@ -37,4 +39,4 @@ bspc rule -a Emacs state=tiled
 #bspc rule -a Kupfer.py focus=on
 #bspc rule -a Screenkey manage=off
 
-bspc desktop III -f
+bspc desktop 3 -f

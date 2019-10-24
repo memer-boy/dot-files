@@ -4,3 +4,6 @@
 [submodule ".config/awesome"]
 	path = .config/awesome
 	url = https://github.com/lcpz/awesome-copycats
+[submodule ".fonts/source-code-pro"]
+	path = .fonts/source-code-pro
+	url = https://github.com/adobe-fonts/source-code-pro
