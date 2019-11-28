@@ -171,3 +171,8 @@ super + ctrl + p
 # MAke IMage
 super + ctrl + s
       maim
+
+# Erlang doc open
+super + e; super + d
+      firefox /usr/share/doc/erlang-doc/doc/index.html
+
