@@ -7,7 +7,7 @@ xset +fp ~/.fonts/ohsnap
 xset +fp ~/.fonts/fontawesome
 xset +fp ~/.fonts/terminesspowerline
 xsetroot -cursor_name left_ptr
-feh --bg-scale Downloads/desert.jpg
+feh --bg-scale .backgrounds/desert.jpg
 
 sxhkd &
 compton &
