@@ -2,6 +2,7 @@
 export PATH=$HOME/.local/bin:/usr/local/bin:$PATH
 export PATH=$HOME/.dynamic-colors/bin:$PATH
 export PATH=$HOME/.cache/rebar3/bin:$PATH
+export PATH=$PATH:$HOME/.scripts
 
 #Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
