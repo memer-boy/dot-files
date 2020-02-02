@@ -4,11 +4,11 @@
 
 # terminal emulator (solarized dark)
 super + Return
-      bash -c "sed -i 's/solarized-light/solarized-dark/g' .zshrc; urxvt -bc +sb #termite #rxvt -bc +sb"
+      bash -c "sed -i 's/solarized-light/solarized-dark/g' .zshrc; sakura #urxvt -bc +sb #termite #rxvt -bc +sb"
 
 # terminal emulator (solarized light)
 super + {_,shift + }Return
-      bash -c "sed -i 's/solarized-dark/solarized-light/g' .zshrc; urxvt -bc +sb #termite #rxvt -bc +sb"
+      bash -c "sed -i 's/solarized-dark/solarized-light/g' .zshrc; sakura #urxvt -bc +sb #termite #rxvt -bc +sb"
 
 super + ctrl + space
       mpc toggle
