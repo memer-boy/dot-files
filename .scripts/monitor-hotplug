@@ -1,0 +1,62 @@
+#!/bin/bash
+
+#Adapt this script to your needs.
+
+DEVICES=$(find /sys/class/drm/*/status)
+
+#inspired by /etc/acpd/lid.sh and the function it sources
+
+displaynum=`ls /tmp/.X11-unix/* | sed s#/tmp/.X11-unix/X##`
+display=":$displaynum.0"
+export DISPLAY=":$displaynum.0"
+#export DISPLAY=:0
+
+# from https://wiki.archlinux.org/index.php/Acpid#Laptop_Monitor_Power_Off
+export XAUTHORITY=$(ps -C Xorg -f --no-header | sed -n 's/.*-auth //; s/ -[^ ].*//; p')
+#export XAUTHORITY=/home/memery/.Xauthority
+
+
+#this while loop declare the $HDMI1 $VGA1 $LVDS1 and others if they are plugged in
+while read l
+do
+  dir=$(dirname $l);
+  status=$(cat $l);
+  dev=$(echo $dir | cut -d\- -f 2-);
+
+  if [ $(expr match  $dev "HDMI") != "0" ]
+  then
+      #REMOVE THE -X- part from HDMI-X-n
+
+    dev=HDMI${dev#HDMI-?-}
+  else
+    dev=$(echo $dev | tr -d '-')
+  fi
+
+  if [ "connected" == "$status" ]
+  then
+    echo $dev "connected"
+    declare $dev="yes";
+
+  fi
+done <<< "$DEVICES"
+
+USER=$(stat -c '%U' $XAUTHORITY)
+test -z $(pgrep Xorg) && exit 0
+
+if [ ! -z "$HDMI1" -a ! -z "$DP1" ]
+then
+    sleep 10
+    echo "Trying office..."
+    echo "File is: /home/$USER/.config/monitor-switch/office.conf"
+    monitor-switch -w DP1=826751052 -w HDMI1=1128945228 -c /home/$USER/.config/monitor-switch/office.conf
+    if [ "$?" == 0 ]; then
+        echo "Configuring bspwm!"
+        test ! -z $(pgrep bspwm) && IS_OFFICE=0 /home/$USER/.config/bspwm/bspwmrc reload
+        exit 0
+    fi
+    echo "Something went wrong!"
+elif [ ! -z "$HDMI1" ]
+then
+    monitor-switch -w HDMI1=16843009 -c /home/$USER/.config/monitor-switch/sala.conf && exit 0
+    echo "Something went wrong!"
+fi

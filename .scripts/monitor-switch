@@ -1,0 +1,174 @@
+#!/bin/bash
+#$(xxd -r -p <<< "$hex")
+
+myname="${0##*/}"
+declare -A MODES
+declare -A NAMES
+declare -A OUTPUTS
+declare -a GUARDS
+
+populate_monitors() {
+	  while read -r output sn hex modes; do
+        if (($1)); then
+            echo "#$output connected to $(xxd -r -p <<< "$hex") ($sn), supported modes: $modes"
+        fi
+        NAMES+=( [$sn]=$(xxd -r -p <<< "$hex") )
+        MODES+=( [$sn]=$modes )
+        OUTPUTS+=( [$output]=$sn)
+	  done < <(xrandr --prop | awk -n '
+  /^[ \t]+[0-9]+x[0-9]+/ {modes=modes " " $1}
+	!/^[ \t]/ {
+		if (output && sn && name) print output, sn, name, modes
+		output=$1
+    hex=""
+		name=""
+    sn=""
+    modes=""
+	}
+	/[:.]/ && h {
+    name=hex
+		sub(/.*000000fc00|.*000000fe00/, "", name)
+		name = substr(name, 0, 26) "0a"
+		sub(/0a.*/, "", name)
+    sn=sprintf("%d", "0x" substr(hex,31,2) substr(hex,29,2) substr(hex,27,2) substr(hex,25,2))
+		h=0
+	}
+	h {sub(/[ \t]+/, ""); hex = hex $0}
+	/EDID.*:/ {h=1}')
+#     for index in ${!OUTPUTS[@]}
+#     do
+#         SN=${OUTPUTS[$index]}
+#         echo "Monitor SN at "$index ":" $SN
+#         echo "Supported modes: " ${MODES[$SN]}
+#     done
+}
+
+message() { printf "%s\n" "$1" >&2 ; }
+fatal()   { [[ "${1:-}" ]] && echo -e "$myname: error: $@" >&2 ; exit 1; }
+argerr()  { printf "%s: %s\n" "$myname" "${1:-error}" >&2 ; usage 1 ; }
+invalid() { argerr "invalid argument: $1" ; }
+missing() { argerr "missing ${2:+$2 }operand${1:+ from $1}." ; }
+
+usage() {
+	cat <<-USAGE
+Switch monitors using xrandr.
+usage: $myname [options]
+USAGE
+	if [[ "$1" ]] ; then
+		cat >&2 <<- USAGE
+		Try '$myname --help' for more information.
+		USAGE
+		exit 1
+	fi
+  # -v|--verbose       - print in terminal the full xrandr command executed.
+  #	-l|--list          - list connector and monitor names of connected outputs.
+  #                      When --verbose, also list the configured monitors.
+  cat <<-USAGE
+where options are:
+  -h|--help            - show this page.
+  -l|--list            - list connector and monitor names of connected outputs.
+  -c|--config name     - use this configuration name.
+  -w|--when output=sn  - when output has a connected monitor with
+                         serial number equal to sn continue to evaluate the
+                         rest of the command.
+
+  Configuration names correspond to files with extension .conf located in:
+
+    $config_path
+
+  The configuration file is divided in sections, all sections have the
+  following form:
+
+    [XRANDR_OUTPUT_NAME]
+    XRANDR_OUTPUT_SWITCH_NAME
+    XRANDR_OUTPUT_SWITCH_NAME=XRANDR_OUTPUT_SWITCH_VALUE
+    ...
+
+  XRANDR_OUTPUT_NAME is the video output name from the xrandr command.
+  XRANDR_OUTPUT_SWITCH_NAME is one of the supported switches for the --output
+  option of the xrandr command.
+  XRANDR_OUTPUT_SWITCH_VALUE is the value for the switch option supported by
+  the xrandr command in your setup.
+  For boolean siwtches just include the name in the section.
+
+  A configuration file would look like:
+
+    [eDP1]
+    mode=1366x768
+    primary
+
+    [HDMI1]
+    off
+
+    [HDMI2]
+    mode=1440x900
+    rotate=left
+    left-of=eDP1
+
+	Copyright (C) 2020 Guillermo Reyes (memer-boy) <guillermo.reyes@substation.pro>
+	License: GPLv3 or later. See <http://www.gnu.org/licenses/gpl.html>
+	USAGE
+	exit 0
+}
+
+parse_config() {
+  awk -F '=' '
+    /^\[[[:alnum:]]+\]/ {
+      if (output) oline = oline " --output " output " --mode " mode flags
+      gsub(/[\[\]]/, "", $1)
+      output=$1
+      mode=""
+      flags=""
+    }
+    /mode/ { mode=$2 }
+    !/mode/ && $2 && $2!="yes" {flags = flags " --" $1 " " $2 }
+    !/mode/ && $2 && $2=="yes" {flags = flags " --" $1 }
+    ENDFILE {
+      if (output) oline = oline " --output " output " --mode " mode flags
+      print oline
+    }' $1
+}
+
+config_path=${XDG_CONFIG_HOME:-"$HOME"/.config}/"$myname"
+
+for arg in "$@"; do [[ "$arg" == "-h" || "$arg" == "--help" ]] && usage ; done
+while (( $# )); do
+	  case "$1" in
+#	      -v|--verbose) verbose=1 ;;
+#	      -q|--no-notify) notify=0;;  # undocumented. For future `notify-send`
+	      -l|--list) list=1 ;;
+	      -c|--config) shift; config_name=$1 ;;
+        -w|--when) shift; GUARDS+=( $1 ) ;;
+	      *) invalid "$1" ;;
+	  esac
+	  shift
+done
+
+if ((list)); then
+	  echo "Connected monitors:"
+fi
+
+populate_monitors $list
+
+#if ! ((${#enable[@]})) && ! ((all)); then
+if [ -z "$config_name" -a -z "$list" ]; then
+	  usage
+elif [ -z "$list" ]; then
+    config_file=$config_name
+    if [[ ! -f "$config_file" ]]; then
+        config_file="$config_path/$config_name.conf"
+    fi
+    for guard in $GUARDS; do
+        read -r output sn < <(echo $guard | awk -F '=' '{print $1, $2}')
+        con=${OUTPUTS[$output]}
+        [ "$con" != "$sn" ] && exit -1
+    done
+    if [[ -f "$config_file" ]]; then
+        xrandr_switches=$(parse_config $config_file)
+	echo "DISPLAY is $DISPLAY" >> /tmp/devices
+	echo "XAUTHORITY $XAUTHORITY" >> /tmp/devices
+        xrandr $xrandr_switches
+    else
+        fatal "$config_name not found"
+    fi
+fi
