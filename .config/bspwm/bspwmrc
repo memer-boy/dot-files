@@ -22,26 +22,6 @@ xset +fp ~/.fonts/fontawesome
 xset +fp ~/.fonts/terminesspowerline
 xsetroot -cursor_name left_ptr
 
-if test -z "$1"; then
-    monitor-switch -w DP1=826751052 -w HDMI1=1128945228 -c office
-    IS_OFFICE=$?
-    monitor-switch -w HDMI1=16843009 -c sala
-    IS_SALA=$?
-fi
-
-if test "$IS_OFFICE" -eq 0 ; then
-    echo "Configurando para la oficina."
-    bspc monitor HDMI1 -d 1 2 3
-    bspc monitor DP1 -d 4 5 6
-    bspc monitor eDP1 -d 7 8 9
-elif test "$IS_SALA" -eq 0 ; then
-    echo "Configurando para la sala."
-    bspc monitor HDMI1 -d 1 2 3
-    bspc monitor eDP1 -d 4 5 6 7 8 9 0
-else
-    echo "Configuración genérica."
-    bspc monitor eDP1 -d 1 2 3 4 5
-fi
 
 sxhkd &
 compton &
@@ -49,7 +29,7 @@ compton &
 # runhaskell -XFlexibleContexts -i$HOME/.scripts/lemonbar $HOME/.scripts/lemonbar/bar.hs &
 wicd-gtk -t &
 blueman-applet 2>&1 > /dev/null &
-mpd
+#mpd
 
 if test -f $HOME/.local/bin/mopidy; then
     mopidy 2>&1 > /dev/null &
@@ -72,8 +52,42 @@ bspc rule -a Emacs state=tiled
 #bspc rule -a Kupfer.py focus=on
 #bspc rule -a Screenkey manage=off
 
-bspc desktop 3 -f
-polybar example 2>&1 &
-feh --bg-fill $HOME/.backgrounds/joystick.jpg
 
-ps aux
+if test -z "$1"; then
+  if monitor-switch -w DP1=1095780169 -w HDMI1=1128945228 -c office; then
+    echo "Configurando para la oficina."
+    bspc monitor HDMI1 -d 1 2 3
+    bspc monitor DP1 -d 4 5 6
+    bspc monitor eDP1 -d 7 8 9
+    feh --bg-tile $HOME/.backgrounds/Tile/bamboo.png
+  elif monitor-switch -w HDMI1=1128945228 -c office3; then
+    echo "Configurando para la oficina 2."
+    bspc monitor HDMI1 -d 1 2 3 4 5
+    bspc monitor eDP1 -d 6 7 8 9 0
+    feh --bg-tile $HOME/.backgrounds/Tile/bamboo.png
+  elif monitor-switch -w HDMI1=16843009 -c sala; then
+    echo "Configurando para la sala."
+    bspc monitor HDMI1 -d 1 2 3
+    bspc monitor eDP1 -d 4 5 6 7 8 9 0
+    feh --bg-tile $HOME/.backgrounds/joystick.jpg
+  elif monitor-switch -w HDMI1=1178023509 -c home; then
+    echo "Configurando para el cuarto ."
+    bspc monitor HDMI1 -d 1 2 3
+    bspc monitor eDP1 -d 4 5 6 7 8 9 0
+    feh --bg-tile $HOME/.backgrounds/Tile/tile_eggs00.png
+    polybar home 2>&1 &
+  else
+    echo "Configuración genérica."
+    #xrandr --output eDP1 --mode 1366x768 --primary
+    #xrandr --output DP1 --mode 1360x768 --left-of eDP1
+    #bspc monitor DP1 -d 1 2 3 
+    bspc monitor eDP1 -d 1 2 3 4 5
+    feh --bg-tile $HOME/.backgrounds/Tile/tile_eggs00.png
+  fi
+fi
+
+polybar example 2>&1 &
+
+bspc desktop 4 -f
+
+#xmodmap -e "pointer = 3 2 1"

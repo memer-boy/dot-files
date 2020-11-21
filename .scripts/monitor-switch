@@ -8,29 +8,29 @@ declare -A OUTPUTS
 declare -a GUARDS
 
 populate_monitors() {
-	  while read -r output sn hex modes; do
+	while read -r output sn hex modes; do
         if (($1)); then
             echo "#$output connected to $(xxd -r -p <<< "$hex") ($sn), supported modes: $modes"
         fi
         NAMES+=( [$sn]=$(xxd -r -p <<< "$hex") )
         MODES+=( [$sn]=$modes )
         OUTPUTS+=( [$output]=$sn)
-	  done < <(xrandr --prop | awk -n '
-  /^[ \t]+[0-9]+x[0-9]+/ {modes=modes " " $1}
+	done < <(xrandr --prop | awk -n '
+	/^[ \t]+[0-9]+x[0-9]+/ {modes=modes " " $1}
 	!/^[ \t]/ {
 		if (output && sn && name) print output, sn, name, modes
 		output=$1
-    hex=""
+		hex=""
 		name=""
-    sn=""
-    modes=""
+		sn=""
+		modes=""
 	}
 	/[:.]/ && h {
-    name=hex
+		name=hex
 		sub(/.*000000fc00|.*000000fe00/, "", name)
 		name = substr(name, 0, 26) "0a"
 		sub(/0a.*/, "", name)
-    sn=sprintf("%d", "0x" substr(hex,31,2) substr(hex,29,2) substr(hex,27,2) substr(hex,25,2))
+ 		sn=sprintf("%d", "0x" substr(hex,31,2) substr(hex,29,2) substr(hex,27,2) substr(hex,25,2))
 		h=0
 	}
 	h {sub(/[ \t]+/, ""); hex = hex $0}
@@ -114,17 +114,21 @@ where options are:
 parse_config() {
   awk -F '=' '
     /^\[[[:alnum:]]+\]/ {
-      if (output) oline = oline " --output " output " --mode " mode flags
+      if (output && off) oline = oline " --output " output " --off"
+      else if (output) oline = oline " --output " output " --mode " mode flags
       gsub(/[\[\]]/, "", $1)
       output=$1
       mode=""
       flags=""
+      off=""
     }
+    /off/ { off=1 }
     /mode/ { mode=$2 }
     !/mode/ && $2 && $2!="yes" {flags = flags " --" $1 " " $2 }
     !/mode/ && $2 && $2=="yes" {flags = flags " --" $1 }
     ENDFILE {
-      if (output) oline = oline " --output " output " --mode " mode flags
+      if (output && off) oline = oline " --output " output " --off"
+      else if (output) oline = oline " --output " output " --mode " mode flags
       print oline
     }' $1
 }
@@ -167,6 +171,7 @@ elif [ -z "$list" ]; then
         xrandr_switches=$(parse_config $config_file)
 	echo "DISPLAY is $DISPLAY" >> /tmp/devices
 	echo "XAUTHORITY $XAUTHORITY" >> /tmp/devices
+        echo "PARSE_CONFIG $xrandr_switches" >> /tmp/devices
         xrandr $xrandr_switches
     else
         fatal "$config_name not found"

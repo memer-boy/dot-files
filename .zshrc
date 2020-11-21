@@ -111,3 +111,8 @@ alias maim="/usr/bin/maim ~/Imágenes/$(date +%s).png"
 
 # OPAM configuration
 . /home/memery/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+
+# Powerline
+source /usr/share/powerline/bindings/zsh/powerline.zsh
+
+export MESA_LOADER_DRIVER_OVERRIDE=i965
