@@ -9,9 +9,11 @@ pkill -f 'python.*blueman-applet'
 # Wait until the processes have been shut down
 sleep 3
 
-PATH=$HOME/.local/bin:$PATH
+PATH=$HOME/.scripts:$HOME/.local/bin:$PATH
+IS_OFFICE=255
+IS_SALA=255
 
-echo $PATH
+echo $PATH >> $HOME/.xsession-errors
 echo $DISPLAY
 echo $XAUTHORITY
 
@@ -22,9 +24,35 @@ xset +fp ~/.fonts/fontawesome
 xset +fp ~/.fonts/terminesspowerline
 xsetroot -cursor_name left_ptr
 
+<<<<<<< HEAD
+=======
+if test -z "$1"; then
+    monitor-switch -w DP1=826751052 -w HDMI1=1128945228 -c office
+    IS_OFFICE=$?
+    monitor-switch -w HDMI1=16843009 -c sala
+    IS_SALA=$?
+fi
+
+if test "$IS_OFFICE" -eq 0 ; then
+    echo "Configurando para la oficina." >> $HOME/.xsession-errors
+    bspc monitor HDMI1 -d 1 2 3
+    bspc monitor DP1 -d 4 5 6
+    bspc monitor eDP1 -d 7 8 9
+elif test "$IS_SALA" -eq 0 ; then
+    echo "Configurando para la sala." >> $HOME/.xsession-errors
+    bspc monitor HDMI1 -d 1 2 3
+    bspc monitor eDP1 -d 4 5 6 7 8 9 0
+else
+    echo "Configuración genérica." >> $HOME/.xsession-errors
+    bspc monitor -d 1 2 3 4 5
+fi
+>>>>>>> 1bb1f2c8990e83cca362177d1ce687b82cd203c3
+
+echo IS_SALA "$IS_SALA" >> $HOME/.xsession-errors ;
+echo IS_OFFICE "$IS_OFFICE" >> $HOME/.xsession-errors ;
 
 sxhkd &
-compton &
+#compton &
 #nitrogen --restore
 # runhaskell -XFlexibleContexts -i$HOME/.scripts/lemonbar $HOME/.scripts/lemonbar/bar.hs &
 wicd-gtk -t &
