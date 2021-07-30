@@ -1,11 +1,11 @@
 #! /bin/sh
 # Terminate already running bar instances
 killall -q polybar
-killall -q sxhkd
+killall cd-q sxhkd
 killall -q compton
 killall -q mpd
-pkill -f 'python.*wicd-client.py'
 pkill -f 'python.*blueman-applet'
+killall -q nm-applet
 # Wait until the processes have been shut down
 sleep 3
 
@@ -28,9 +28,9 @@ sxhkd &
 compton &
 #nitrogen --restore
 # runhaskell -XFlexibleContexts -i$HOME/.scripts/lemonbar $HOME/.scripts/lemonbar/bar.hs &
-wicd-gtk -t &
 blueman-applet 2>&1 > /dev/null &
 #mpd
+nm-applet 2>&1 > /dev/null &
 
 if test -f $HOME/.local/bin/mopidy; then
     mopidy 2>&1 > /dev/null &
@@ -75,6 +75,12 @@ if test -z "$1"; then
     echo "Configurando para el cuarto ."
     bspc monitor HDMI1 -d 1 2 3
     bspc monitor eDP1 -d 4 5 6 7 8 9 0
+    feh --bg-tile $HOME/.backgrounds/Tile/tile_eggs00.png
+    polybar home 2>&1 &
+  elif monitor-switch -w HDMI1=1515868723 -c office4; then
+    echo "Configurando para Altuve's office."
+    bspc monitor HDMI1 -d 1 2 3 4 5
+    bspc monitor eDP1 -d 6 7 8 9 0
     feh --bg-tile $HOME/.backgrounds/Tile/tile_eggs00.png
     polybar home 2>&1 &
   else
